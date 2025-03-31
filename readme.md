@@ -2,4 +2,4 @@
 
 ## Database structure
 
-![Database structure](src\img\omauni_db_structure.png)
+![Database structure](src/img/omauni_db_structure.png)
