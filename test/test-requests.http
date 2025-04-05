@@ -1,0 +1,113 @@
+# Testing http requests with Visual Studio Code REST Client extension
+
+### Kubios API Tests
+@kubiosUsername = ADD_YOUR_KUBIOS_USERNAME_IT_IS_PROBABLY_YOUR_EMAIL
+@kubiosPassword = ADD_YOUR_KUBIOS_PASSWORD
+@token = ADD_YOUR_TOKEN
+
+POST http://localhost:3000/api/auth/login
+content-type: application/json
+
+{
+  "username": "{{kubiosUsername}}",
+  "password": "{{kubiosPassword}}"
+}
+
+### get Kubios user info
+GET http://localhost:3000/api/kubios-data/user-info
+Authorization: Bearer {{token}}
+
+### get Kubios user data
+GET http://localhost:3000/api/kubios-data/user-data
+Authorization: Bearer {{token}}
+
+### post a new entry
+POST http://localhost:3000/api/entries
+Authorization: Bearer {{token}}
+content-type: application/json
+
+{
+  "date": "2025-02-27",
+  "bed_time": "2025-02-27 22:00:00",
+  "asleep_delay": 11,
+  "time_awake": 10,
+  "wakeup_time": "2025-02-28 07:00:00",
+  "total_sleep": 8,
+  "total_bed_time": 9,
+  "sleep_quality": 4,
+  "daytime_alertness": 4,
+  "sleep_mgmt_methods": "none",
+  "sleep_factors": "none"
+}
+
+### Get user's entries
+GET http://localhost:3000/api/entries
+Authorization: Bearer {{token}}
+
+
+
+### TODO: Next requests below not updated yet -Mei
+
+
+
+###########################
+
+## Users resource endpoints
+
+### get all users
+GET http://localhost:3000/api/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo3LCJ1c2VybmFtZSI6Im5ld3VzZXJuYW1lIiwiZW1haWwiOiJuZXdlbWFpbEBleGFtcGxlLmNvbSIsImNyZWF0ZWRfYXQiOiIyMDI1LTAyLTA2VDEzOjA5OjA3LjAwMFoiLCJ1c2VyX2xldmVsIjoicmVndWxhciIsImlhdCI6MTczOTM2NTk0MiwiZXhwIjoxNzM5NDUyMzQyfQ.IO9ly-VkHACUPca_TGNlNGLA3brezP-tck1yQ1nFC5M
+
+### get user by id
+GET http://localhost:3000/api/users/3
+
+### create a new user (user registration)
+POST http://localhost:3000/api/users
+content-type: application/json
+
+{
+  "username": "x345",
+  "password": "x1234567",
+  "email": "xx@example.com"
+}
+
+### modify an existing user by id
+PUT http://localhost:3000/api/users/3
+content-type: application/json
+
+{
+  "username": "editedname",
+  "password": "editedpasswordx",
+  "email": "editedmail@example.com"
+}
+
+### delete a user (by id)
+DELETE http://localhost:3000/api/users/3
+
+### user login
+POST http://localhost:3000/api/auth/login
+content-type: application/json
+
+{
+  "username": "newusername2",
+  "password": "passwordx"
+}
+
+### get my user info
+GET http://localhost:3000/api/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo3LCJ1c2VybmFtZSI6Im5ld3VzZXJuYW1lIiwiZW1haWwiOiJuZXdlbWFpbEBleGFtcGxlLmNvbSIsImNyZWF0ZWRfYXQiOiIyMDI1LTAyLTA2VDEzOjA5OjA3LjAwMFoiLCJ1c2VyX2xldmVsIjoicmVndWxhciIsImlhdCI6MTczOTM2NTk0MiwiZXhwIjoxNzM5NDUyMzQyfQ.IO9ly-VkHACUPca_TGNlNGLA3brezP-tck1yQ1nFC5M
+
+## (Diary)Entries
+
+
+
+### edit an existing entry
+PUT http://localhost:3000/api/entries
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMiwidXNlcm5hbWUiOiJuZXd1c2VybmFtZTIiLCJwYXNzd29yZCI6IiQyYSQxMCRNZVpETzZ4ckpIVFNncnVrZ1ZtR2wuaFRLVUp1NjUwc1c1MlNoOHhRcjhHTlJuUlV1N1FXQyIsImVtYWlsIjoibmV3ZW1haWwyQGV4YW1wbGUuY29tIiwiY3JlYXRlZF9hdCI6IjIwMjUtMDItMTNUMTE6NDg6NTIuMDAwWiIsInVzZXJfbGV2ZWwiOiJyZWd1bGFyIiwiaWF0IjoxNzQwNjU1ODA4LCJleHAiOjE3NDA3NDIyMDh9.VdHENb37OV-5CuCTxCdY22BdBpSL90XrNpxM0N-Vh4c
+content-type: application/json
+
+{
+ "entry_id": 11,
+ "sleep_hours": 7,
+ "notes": "päivitetyt notes"
+}
