@@ -120,6 +120,7 @@ const syncWithLocalUser = async (kubiosUser) => {
     const newUserResult = await insertUser(newUser);
     userId = newUserResult.user_id;
   } else {
+    console.log('User already exists', result);
     userId = result.user_id;
   }
   console.log('syncWithLocalUser userId', userId);

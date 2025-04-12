@@ -21,7 +21,7 @@ const notFoundHandler = (req, res, next) => {
 /**
  * Custom default middleware for handling errors
  */
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res) => {
   res.status(err.status || 500); // default is 500 if err.status is not defined
   res.json({
     message: err.message,

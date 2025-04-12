@@ -2,8 +2,9 @@ import {insertEntry, selectEntriesByUserId, updateEntry} from '../models/entry-m
 
 const postEntry = async (req, res, next) => {
   // user_id, date, bed_time, asleep_delay, time_awake, wakeup_time, total_sleep, total_bed_time, sleep_quality, daytime_alertness, sleep_mgmt_methods, sleep_factors
+  console.log("entry-controller.js postEntry", req.body);
   const newEntry = req.body;
-  newEntry.user_id = req.user.userId;
+  console.log("newEntry", newEntry, newEntry.user_id);
   try {
     await insertEntry(newEntry);
     res.status(201).json({message: "Entry added."});

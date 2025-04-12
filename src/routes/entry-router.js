@@ -14,14 +14,14 @@ entryRouter
   .route('/')
   // post to /api/entries
   .post(
-    authenticateToken,
+    //authenticateToken,
     body('date').notEmpty().isDate(),
-    body('bed_time').notEmpty().isISO8601(),
+    body('bed_time').notEmpty().isISO8601(), // datetime
     body('asleep_delay').notEmpty().isInt({min: 0, max: 1440}), // minutes (0-1440)
-    body('time_awake').notEmpty().isInt({min: 0, max: 1440}),
-    body('wakeup_time').notEmpty().isISO8601(),
-    body('total_sleep').notEmpty().isInt({min: 0, max: 24}), // hours (0-24)
-    body('total_bed_time').notEmpty().isInt({min: 0, max: 24}), // hours (0-24)
+    body('time_awake').notEmpty().isInt({min: 0, max: 1440}), // minutes (0-1440)
+    body('wakeup_time').notEmpty().isISO8601(), // datetime
+    body('total_sleep').notEmpty().isInt({min: 0, max: 1440}), // minutes (0-1440)
+    body('total_bed_time').notEmpty().isInt({min: 0, max: 1440}), // minutes (0-1440)
     body('sleep_quality').notEmpty().isInt({min: 1, max: 10}), // rating (1-10)
     body('daytime_alertness').notEmpty().isInt({min: 1, max: 10}), // rating (1-10)
     body('sleep_mgmt_methods').optional().isString().trim().escape(),
@@ -37,7 +37,7 @@ entryRouter
   .route('/:id')
 //  .get(authenticateToken, getEntryById)
   .put(
-    authenticateToken,
+    //authenticateToken,
     param('entry_id').isInt(), // entry_id parameter is part of the request URL, no request body
     body('entry_date').optional().isDate(),
     body('mood').trim().optional().isLength({min: 3, max: 25}).escape(),

@@ -6,16 +6,20 @@ import promisePool from '../utils/database.js';
  * @returns
  */
 const insertEntry = async (entry) => {
+  console.log("entry-model.js insertEntry", entry);
+  entry.user_id = parseInt(entry.user_id);
+  console.log("entry", entry);
   try {
     const [result] = await promisePool.query(
       `INSERT INTO Entries
-      (user_id, date, bed_time, asleep_delay, time_awake, wakeup_time, total_sleep, total_bed_time, sleep_quality, daytime_alertness, sleep_mgmt_methods, sleep_factors)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      (user_id, date, bed_time, asleep_delay, wakeups, time_awake, wakeup_time, total_sleep, total_bed_time, sleep_quality, daytime_alertness, sleep_mgmt_methods, sleep_factors)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
-        entry.user_id,
+        1,
         entry.date,
         entry.bed_time,
         entry.asleep_delay,
+        entry.wakeups,
         entry.time_awake,
         entry.wakeup_time,
         entry.total_sleep,

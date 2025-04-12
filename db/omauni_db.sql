@@ -33,3 +33,6 @@ CREATE TABLE Entries (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
+
+-- Alter table `entries`
+ALTER TABLE Entries ADD COLUMN wakeups INT(10) NOT NULL;
