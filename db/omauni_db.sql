@@ -34,5 +34,8 @@ CREATE TABLE Entries (
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
--- Alter table `entries`
+-- Alter table `Entries`
 ALTER TABLE Entries ADD COLUMN wakeups INT(10) NOT NULL;
+
+-- Alter table `Users`
+ALTER TABLE users ADD COLUMN reminder_email VARCHAR(255);

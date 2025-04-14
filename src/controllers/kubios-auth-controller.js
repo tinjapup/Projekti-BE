@@ -115,6 +115,7 @@ const syncWithLocalUser = async (kubiosUser) => {
       first_name: kubiosUser.given_name,
       last_name: kubiosUser.family_name,
       email: kubiosUser.email,
+      reminder_email: kubiosUser.email,
       phone_number: "0401234567",
     };
     const newUserResult = await insertUser(newUser);
