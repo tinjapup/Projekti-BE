@@ -38,4 +38,5 @@ CREATE TABLE Entries (
 ALTER TABLE Entries ADD COLUMN wakeups INT(10) NOT NULL;
 
 -- Alter table `Users`
-ALTER TABLE users ADD COLUMN reminder_email VARCHAR(255);
+ALTER TABLE Users ADD COLUMN reminder_email VARCHAR(255);
+ALTER TABLE Users MODIFY COLUMN email VARCHAR(255);
