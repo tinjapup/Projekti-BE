@@ -15,7 +15,7 @@ const insertEntry = async (entry) => {
       (user_id, date, bed_time, asleep_delay, wakeups, time_awake, wakeup_time, total_sleep, total_bed_time, sleep_quality, daytime_alertness, sleep_mgmt_methods, sleep_factors)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
-        1,
+        entry.user_id,
         entry.date,
         entry.bed_time,
         entry.asleep_delay,
