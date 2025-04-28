@@ -111,15 +111,17 @@ const syncWithLocalUser = async (kubiosUser) => {
   // If user with the email not found, create new user, otherwise use existing
   if (result.error) {
     // Create user
+    //TODO: ask for phone number
+    const phoneNumber = `040${Math.floor(1000000 + Math.random() * 9000000)}`;
     const newUser = {
       first_name: kubiosUser.given_name,
       last_name: kubiosUser.family_name,
       email: kubiosUser.email,
       reminder_email: kubiosUser.email,
-      phone_number: "0401234567",
+      phone_number: phoneNumber,
     };
     const newUserResult = await insertUser(newUser);
-    userId = newUserResult.user_id;
+    userId = newUserResult;
   } else {
     console.log('User already exists', result);
     userId = result.user_id;

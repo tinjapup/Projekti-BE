@@ -15,7 +15,7 @@ entryRouter
   .route('/')
   // post to /api/entries
   .post(
-    //authenticateToken,
+    authenticateToken,
     body('date').notEmpty().isDate(),
     body('bed_time').notEmpty().isISO8601(), // datetime
     body('asleep_delay').notEmpty().isInt({min: 0, max: 1440}), // minutes (0-1440)
