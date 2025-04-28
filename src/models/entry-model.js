@@ -103,4 +103,35 @@ const updateEntry = async (entry) => {
   }
 };
 
-export {insertEntry, selectEntriesByUserId, selectEntryById, updateEntry};
+/**
+ * Insert a new diary entry to the database
+ * @param {object} entry Diary entry details
+ * @returns
+ */
+const insertDraft = async (entry, res) => {
+  console.log("entry-model.js insertDraft", entry);
+  //entry.user_id = parseInt(entry.user_id);
+  console.log("entry", entry.user_id);
+  try {
+    const [result] = await promisePool.query(
+      `INSERT INTO entry_drafts (user_id, date, data)
+       VALUES (?, ?, ?)`,
+      [
+        entry.user_id,
+        entry.date,
+        JSON.stringify(entry) // Save the full entry as JSON
+      ]
+    );
+
+    console.log('insertDraft', result);
+    // return only first item of the result array
+    return result.insertId;
+  } catch (error) {
+    console.error("insertDraft", error);
+    res.status(400).json({ error: error.sqlMessage });
+    console.log("insertDraft", error.sqlMessage);
+    //throw new Error('database error');
+  }
+};
+
+export {insertEntry, selectEntriesByUserId, selectEntryById, updateEntry, insertDraft};

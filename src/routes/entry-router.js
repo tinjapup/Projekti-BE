@@ -3,6 +3,7 @@ import {
   getEntries,
   postEntry,
   putEntry,
+  saveDraft,
 } from '../controllers/entry-controller.js';
 import {authenticateToken} from '../middlewares/authentication.js';
 import {body, param} from 'express-validator';
@@ -30,6 +31,13 @@ entryRouter
     postEntry,
   )
   .get(authenticateToken, getEntries);
+
+
+entryRouter
+.route('/draft')
+.post(
+  saveDraft,
+);
 
 
   // TODO: do we need these? -Mei

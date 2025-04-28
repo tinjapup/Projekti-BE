@@ -14,7 +14,7 @@ CREATE TABLE Users (
     user_level ENUM('admin', 'user') NOT NULL DEFAULT 'user'
 );
 
--- Table structure for table `entries`
+-- Table structure for table `Entries`
 DROP TABLE IF EXISTS `Entries`;
 CREATE TABLE Entries (
     user_id INT NOT NULL,
@@ -40,3 +40,12 @@ ALTER TABLE Entries ADD COLUMN wakeups INT(10) NOT NULL;
 -- Alter table `Users`
 ALTER TABLE Users ADD COLUMN reminder_email VARCHAR(255);
 ALTER TABLE Users MODIFY COLUMN email VARCHAR(255);
+
+-- Table structure for table `Entry_drafts`
+DROP TABLE IF EXISTS `Entry_drafts`;
+CREATE TABLE Entry_drafts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  data JSON NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
