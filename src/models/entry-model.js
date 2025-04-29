@@ -108,14 +108,33 @@ const updateEntry = async (entry) => {
  * @param {object} entry Diary entry details
  * @returns
  */
-const insertDraft = async (entry, res) => {
+const insertDraft = async (entry) => {
   console.log("entry-model.js insertDraft", entry);
   //entry.user_id = parseInt(entry.user_id);
-  console.log("entry", entry.user_id);
+  console.log("entry", entry.user_id, entry.date);
   try {
+
+    // Check if a draft already exists for this user and date
+    const [existingDrafts] = await promisePool.query(
+      `SELECT * FROM entry_drafts WHERE user_id = ? AND date = ?`,
+      [entry.user_id, entry.date]
+    );
+
+    if (existingDrafts.length > 0) {
+      console.log("Draft already exists for this date");
+      return {
+        error: `Päivämäärällä ${entry.date} on jo luonnos!`,
+        rows: typeof existingDrafts[0].data === 'string'
+      ? JSON.parse(existingDrafts[0].data)
+      : existingDrafts[0].data
+      };
+    };
+
     const [result] = await promisePool.query(
       `INSERT INTO entry_drafts (user_id, date, data)
-       VALUES (?, ?, ?)`,
+       VALUES (?, ?, ?)
+       ON DUPLICATE KEY UPDATE
+       data = VALUES(data)`,
       [
         entry.user_id,
         entry.date,
@@ -126,12 +145,44 @@ const insertDraft = async (entry, res) => {
     console.log('insertDraft', result);
     // return only first item of the result array
     return result.insertId;
+
   } catch (error) {
     console.error("insertDraft", error);
-    res.status(400).json({ error: error.sqlMessage });
-    console.log("insertDraft", error.sqlMessage);
-    //throw new Error('database error');
-  }
+    return { error: error.sqlMessage };
+}
+}
+;
+
+/**
+ * Update draft entry
+ * @param {object} entry Diary entry details
+ * @returns
+ */
+const editDraft = async (entry) => {
+
+  await promisePool.query(
+    `INSERT INTO entry_drafts (user_id, date, data)
+     VALUES (?, ?, ?)
+     ON DUPLICATE KEY UPDATE
+     data = VALUES(data)`,
+    [
+      entry.user_id,
+      entry.date,
+      JSON.stringify(entry) // Save the full entry as JSON
+    ]);
+
+
+  const [updatedDraft] = await promisePool.query(
+    `SELECT * FROM entry_drafts WHERE user_id = ? AND date = ?`,
+    [entry.user_id, entry.date]
+  );
+
+  return {
+    error: `Draft already exists for date ${entry.date}!`,
+    rows: typeof updatedDraft[0].data === 'string'
+      ? JSON.parse(updatedDraft[0].data)
+      : updatedDraft[0].data
+  };
 };
 
-export {insertEntry, selectEntriesByUserId, selectEntryById, updateEntry, insertDraft};
+export {insertEntry, selectEntriesByUserId, selectEntryById, updateEntry, insertDraft, editDraft};

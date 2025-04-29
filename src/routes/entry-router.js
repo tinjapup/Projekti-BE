@@ -4,6 +4,7 @@ import {
   postEntry,
   putEntry,
   saveDraft,
+  updateDraft
 } from '../controllers/entry-controller.js';
 import {authenticateToken} from '../middlewares/authentication.js';
 import {body, param} from 'express-validator';
@@ -37,6 +38,9 @@ entryRouter
 .route('/draft')
 .post(
   saveDraft,
+)
+.put(
+  updateDraft
 );
 
 

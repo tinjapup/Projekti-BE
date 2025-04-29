@@ -1,4 +1,4 @@
-import {insertEntry, selectEntriesByUserId, updateEntry} from '../models/entry-model.js';
+import {insertEntry, selectEntriesByUserId, updateEntry, insertDraft, editDraft} from '../models/entry-model.js';
 
 const postEntry = async (req, res, next) => {
   // user_id, date, bed_time, asleep_delay, time_awake, wakeup_time, total_sleep, total_bed_time, sleep_quality, daytime_alertness, sleep_mgmt_methods, sleep_factors
@@ -51,4 +51,44 @@ const getEntries = async (req, res, next) => {
   }
 };
 
-export {putEntry, postEntry, getEntries};
+
+/**
+ * Controller for posting an draft
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+
+const saveDraft = async (req, res, next) => {
+  console.log("entry-controller.js saveDraft", req.body);
+    const newEntry = req.body;
+    console.log("newEntry", newEntry, newEntry.user_id);
+    try {
+      const response = await insertDraft(newEntry, res);
+      res.status(201).json({message: "Draft added.", rows: response.rows});
+    } catch (error) {
+      next(error);
+    }
+  };
+
+
+/**
+ * Controller for updating a draft
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+
+  const updateDraft = async (req, res, next) => {
+    console.log("entry-controller.js updateDraft", req.body);
+      const updatedEntry = req.body;
+      console.log("updatedEntry", updatedEntry, updatedEntry.user_id);
+      try {
+        const response = await editDraft(updatedEntry, res);
+        res.status(201).json({message: "Draft edited.", rows: response.rows});
+      } catch (error) {
+        next(error);
+      }
+    };
+
+export {putEntry, postEntry, getEntries, saveDraft, updateDraft};

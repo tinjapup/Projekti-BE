@@ -43,9 +43,10 @@ ALTER TABLE Users MODIFY COLUMN email VARCHAR(255);
 
 -- Table structure for table `Entry_drafts`
 DROP TABLE IF EXISTS `Entry_drafts`;
-CREATE TABLE Entry_drafts (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT,
+CREATE TABLE entry_drafts (
+  user_id INT NOT NULL,
+  date DATE NOT NULL,
   data JSON NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (user_id, date)
 );
