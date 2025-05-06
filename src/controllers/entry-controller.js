@@ -65,7 +65,7 @@ const saveDraft = async (req, res, next) => {
     console.log("newEntry", newEntry, newEntry.user_id);
     try {
       const response = await insertDraft(newEntry, res);
-      res.status(201).json({message: "Draft added.", rows: response.rows});
+      res.status(201).json({message: response.message, error: response.error, rows: response.rows, entry: response.entry});
     } catch (error) {
       next(error);
     }

@@ -29,7 +29,17 @@ const insertEntry = async (entry) => {
         entry.sleep_mgmt_methods,
         entry.sleep_factors,
       ],
-    );
+    )
+
+    // delete draft entry if it exists
+    await promisePool.query(
+      `DELETE FROM entry_drafts WHERE user_id = ? AND date = ?`,
+      [
+        entry.user_id,
+        entry.date,
+      ],
+    )
+
     console.log('insertEntry', result);
     // return only first item of the result array
     return result.insertId;
@@ -113,6 +123,24 @@ const insertDraft = async (entry) => {
   //entry.user_id = parseInt(entry.user_id);
   console.log("entry", entry.user_id, entry.date);
   try {
+
+
+    // Check if an entry already exists for this user and date
+    const [existingEntries] = await promisePool.query(
+      `SELECT * FROM entries WHERE user_id = ? AND date = ?`,
+      [entry.user_id, entry.date]
+    );
+
+    if (existingEntries.length > 0) {
+      console.log("Entry already exists for this date", existingEntries[0]);
+      return {
+        error: `Päivämäärällä ${entry.date} on jo merkintä!`,
+        entry: typeof existingEntries[0] === 'string'
+      ? JSON.parse(existingEntries[0])
+      : existingEntries[0]
+      };
+    };
+
 
     // Check if a draft already exists for this user and date
     const [existingDrafts] = await promisePool.query(
