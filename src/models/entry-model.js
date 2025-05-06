@@ -57,7 +57,7 @@ const insertEntry = async (entry) => {
 const selectEntriesByUserId = async (userId) => {
   try {
     const [rows] = await promisePool.query(
-      'SELECT * FROM entries WHERE user_id=?',
+      'SELECT * FROM Entries WHERE user_id=?',
       [userId],
     );
     console.log(rows);
@@ -75,7 +75,7 @@ const selectEntriesByUserId = async (userId) => {
  */
 const selectEntryById = async (entryId) => {
   const [rows] = await promisePool.query(
-    'SELECT * FROM entries WHERE entry_id=?',
+    'SELECT * FROM Entries WHERE entry_id=?',
     [entryId],
   );
   console.log(rows);
@@ -127,7 +127,7 @@ const insertDraft = async (entry) => {
 
     // Check if an entry already exists for this user and date
     const [existingEntries] = await promisePool.query(
-      `SELECT * FROM entries WHERE user_id = ? AND date = ?`,
+      `SELECT * FROM Entries WHERE user_id = ? AND date = ?`,
       [entry.user_id, entry.date]
     );
 
