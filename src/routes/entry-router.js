@@ -2,12 +2,15 @@ import express from 'express';
 import {
   getEntries,
   postEntry,
-  putEntry,
+  //putEntry,
   saveDraft,
   updateDraft
 } from '../controllers/entry-controller.js';
 import {authenticateToken} from '../middlewares/authentication.js';
-import {body, param} from 'express-validator';
+import {
+  body,
+  //param
+} from 'express-validator';
 import {validationErrorHandler} from '../middlewares/error-handler.js';
 
 const entryRouter = express.Router();
@@ -31,35 +34,44 @@ entryRouter
     validationErrorHandler,
     postEntry,
   )
+  // get from /api/entries
   .get(authenticateToken, getEntries);
 
 
 entryRouter
 .route('/draft')
+// post to /api/entries/draft
 .post(
+  authenticateToken,
+  body('date').notEmpty().isDate(),
+  validationErrorHandler,
   saveDraft,
 )
+// put to /api/entries/draft
 .put(
-  updateDraft
+  authenticateToken,
+  body('date').notEmpty().isDate(),
+  validationErrorHandler,
+  updateDraft,
 );
 
 
   // TODO: do we need these? -Mei
-entryRouter
-  .route('/:id')
-//  .get(authenticateToken, getEntryById)
-  .put(
-    //authenticateToken,
-    param('entry_id').isInt(), // entry_id parameter is part of the request URL, no request body
-    body('entry_date').optional().isDate(),
-    body('mood').trim().optional().isLength({min: 3, max: 25}).escape(),
-    body('weight', 'must be number between 2-200')
-      .optional()
-      .isFloat({min: 2, max: 200}),
-    body('sleep_hours').optional().isInt({min: 0, max: 24}),
-    body('notes').optional().isLength({min: 0, max: 1500}).escape(),
-    validationErrorHandler,
-    putEntry,
-  );
+// entryRouter
+//   .route('/:id')
+// //  .get(authenticateToken, getEntryById)
+//   .put(
+//     //authenticateToken,
+//     param('entry_id').isInt(), // entry_id parameter is part of the request URL, no request body
+//     body('entry_date').optional().isDate(),
+//     body('mood').trim().optional().isLength({min: 3, max: 25}).escape(),
+//     body('weight', 'must be number between 2-200')
+//       .optional()
+//       .isFloat({min: 2, max: 200}),
+//     body('sleep_hours').optional().isInt({min: 0, max: 24}),
+//     body('notes').optional().isLength({min: 0, max: 1500}).escape(),
+//     validationErrorHandler,
+//     putEntry,
+//   );
 
 export default entryRouter;
