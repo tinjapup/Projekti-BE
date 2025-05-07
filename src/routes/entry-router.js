@@ -42,14 +42,14 @@ entryRouter
 .route('/draft')
 // post to /api/entries/draft
 .post(
-  authenticateToken,
+  //authenticateToken,
   body('date').notEmpty().isDate(),
   validationErrorHandler,
   saveDraft,
 )
 // put to /api/entries/draft
 .put(
-  authenticateToken,
+  //authenticateToken,
   body('date').notEmpty().isDate(),
   validationErrorHandler,
   updateDraft,
