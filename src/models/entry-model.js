@@ -132,9 +132,13 @@ const insertDraft = async (entry) => {
     );
 
     if (existingEntries.length > 0) {
-      console.log("Entry already exists for this date", existingEntries[0]);
+      //console.log("Entry already exists for this date", existingEntries[0]);
+      const [year, month, day] = entry.date.split('T')[0].split('-')
+      const string = `${day}.${month}.${year}`;
+      console.log("string", string);
+
       return {
-        error: `Päivämäärällä ${entry.date} on jo merkintä!`,
+        error: `Päivämäärällä ${string} on jo merkintä!`,
         entry: typeof existingEntries[0] === 'string'
       ? JSON.parse(existingEntries[0])
       : existingEntries[0]
@@ -149,9 +153,13 @@ const insertDraft = async (entry) => {
     );
 
     if (existingDrafts.length > 0) {
-      console.log("Draft already exists for this date");
+      //console.log("Draft already exists for this date");
+
+      const [year, month, day] = entry.date.split('T')[0].split('-')
+      const string = `${day}.${month}.${year}`;
+
       return {
-        error: `Päivämäärällä ${entry.date} on jo luonnos!`,
+        error: `Päivämäärällä ${string} on jo luonnos!`,
         rows: typeof existingDrafts[0].data === 'string'
       ? JSON.parse(existingDrafts[0].data)
       : existingDrafts[0].data
