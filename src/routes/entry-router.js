@@ -98,59 +98,17 @@ entryRouter
 entryRouter
 .route('/draft')
 .post(
+  authenticateToken,
   body('date').notEmpty().isDate(),
   validationErrorHandler,
   saveDraft,
 )
 .put(
+  authenticateToken,
   body('date').notEmpty().isDate(),
   validationErrorHandler,
   updateDraft,
 );
 
-
-
-/**
- * @api {put} /api/entries/:id Update an entry
- * @apiName PutEntry
- * @apiGroup Entries
- * @apiPermission token
- *
- * @apiDescription Updates an existing diary entry for the authenticated user.
- *
- * @apiHeader {String} Authorization Bearer token.
- *
- * @apiParam {Number} id Entry ID.
- *
- * @apiBody {String} [entry_date] Entry date in YYYY-MM-DD format (optional).
- * @apiBody {String} [mood] Mood description (optional).
- * @apiBody {Number} [weight] Weight in kilograms (optional, 2-200).
- * @apiBody {Number} [sleep_hours] Sleep hours (optional, 0-24).
- * @apiBody {String} [notes] Notes (optional, max 1500 characters).
- *
- * @apiSuccess {String} message Success message.
- *
- * @apiSuccessExample Success-Response:
- *     HTTP/1.1 200 OK
- *     {
- *       "message": "Entry updated."
- *     }
- */
-entryRouter
-  .route('/:id')
-//  .get(authenticateToken, getEntryById)
-  .put(
-    //authenticateToken,
-    body('entry_id').isInt(), // entry_id parameter is part of the request URL, no request body
-    body('entry_date').optional().isDate(),
-    body('mood').trim().optional().isLength({min: 3, max: 25}).escape(),
-    body('weight', 'must be number between 2-200')
-      .optional()
-      .isFloat({min: 2, max: 200}),
-    body('sleep_hours').optional().isInt({min: 0, max: 24}),
-    body('notes').optional().isLength({min: 0, max: 1500}).escape(),
-    validationErrorHandler,
-    //putEntry,
-  );
 
 export default entryRouter;
