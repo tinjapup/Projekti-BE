@@ -141,7 +141,7 @@ entryRouter
 //  .get(authenticateToken, getEntryById)
   .put(
     //authenticateToken,
-    param('entry_id').isInt(), // entry_id parameter is part of the request URL, no request body
+    body('entry_id').isInt(), // entry_id parameter is part of the request URL, no request body
     body('entry_date').optional().isDate(),
     body('mood').trim().optional().isLength({min: 3, max: 25}).escape(),
     body('weight', 'must be number between 2-200')
@@ -150,7 +150,7 @@ entryRouter
     body('sleep_hours').optional().isInt({min: 0, max: 24}),
     body('notes').optional().isLength({min: 0, max: 1500}).escape(),
     validationErrorHandler,
-    putEntry,
+    //putEntry,
   );
 
 export default entryRouter;
