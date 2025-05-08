@@ -1,16 +1,3 @@
-/**
- * Authentication resource controller using Kubios API for login
-* @module controllers/auth-controller
-* @author mattpe <mattpe@metropolia.fi>
-* @requires jsonwebtoken
-* @requires bcryptjs
-* @requires dotenv
-* @requires models/user-model
-* @requires middlewares/error-handler
-* @exports postLogin
-* @exports getMe
-*/
-
 import 'dotenv/config';
 import jwt from 'jsonwebtoken';
 import fetch from 'node-fetch';
@@ -22,16 +9,91 @@ import {
   selectUserById,
 } from '../models/user-model.js';
 
+/**
+ * @api {post} /api/auth/login User Login
+ * @apiName PostLogin
+ * @apiGroup Authentication
+ * @apiPermission all
+ *
+ * @apiDescription Authenticates a user with Kubios credentials and returns a JWT token for further API access.
+ *
+ * @apiBody {String} username The username of the user.
+ * @apiBody {String} password The password of the user.
+ *
+ * @apiSuccess {String} message Success message.
+ * @apiSuccess {Object} user User details fetched from Kubios.
+ * @apiSuccess {String} user.first_name User's first name.
+ * @apiSuccess {String} user.last_name User's last name.
+ * @apiSuccess {String} user.email User's email address.
+ * @apiSuccess {Number} user_id Local user ID.
+ * @apiSuccess {String} token JWT token for authentication.
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "message": "Logged in successfully with Kubios",
+ *       "user": {
+ *         "first_name": "John",
+ *         "last_name": "Doe",
+ *         "email": "johndoe@example.com"
+ *       },
+ *       "user_id": 123,
+ *       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *     }
+ *
+ * @apiError InvalidCredentials The provided username or password is incorrect.
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 401 Unauthorized
+ *     {
+ *       "message": "Login with Kubios failed due bad username/password"
+ *     }
+ *
+ * @apiError ServerError An internal server error occurred.
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "Login with Kubios failed"
+ *     }
+ */
+
+/**
+ * @api {get} /api/auth/me Get Current User
+ * @apiName GetMe
+ * @apiGroup Authentication
+ * @apiPermission token
+ *
+ * @apiDescription Fetches the details of the currently authenticated user.
+ *
+ * @apiHeader {String} Authorization Bearer token.
+ *
+ * @apiSuccess {Object} user User details from the local database.
+ * @apiSuccess {String} user.first_name User's first name.
+ * @apiSuccess {String} user.last_name User's last name.
+ * @apiSuccess {String} user.email User's email address.
+ * @apiSuccess {String} kubios_token The Kubios ID token.
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "user": {
+ *         "first_name": "John",
+ *         "last_name": "Doe",
+ *         "email": "johndoe@example.com"
+ *       },
+ *       "kubios_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *     }
+ *
+ * @apiError Unauthorized The provided token is invalid or expired.
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 401 Unauthorized
+ *     {
+ *       "message": "Invalid token"
+ *     }
+ */
+
 // Kubios API base URL should be set in .env
 const baseUrl = process.env.KUBIOS_API_URI;
 
-/**
-* Creates a POST login request to Kubios API
-* @async
-* @param {string} username Username in Kubios
-* @param {string} password Password in Kubios
-* @return {string} idToken Kubios id token
-*/
 const kubiosLogin = async (username, password) => {
   const csrf = v4();
   const headers = new Headers();
@@ -76,12 +138,6 @@ const kubiosLogin = async (username, password) => {
   return idToken;
 };
 
-/**
-* Get user info from Kubios API
-* @async
-* @param {string} idToken Kubios id token
-* @return {object} user User info
-*/
 const kubiosUserInfo = async (idToken) => {
   const headers = new Headers();
   headers.append('User-Agent', process.env.KUBIOS_USER_AGENT);
@@ -98,12 +154,6 @@ const kubiosUserInfo = async (idToken) => {
   }
 };
 
-/**
-* Sync Kubios user info with local db
-* @async
-* @param {object} kubiosUser User info from Kubios API
-* @return {number} userId User id in local db
-*/
 const syncWithLocalUser = async (kubiosUser) => {
   // Check if user exists in local db
   let userId;
@@ -130,14 +180,6 @@ const syncWithLocalUser = async (kubiosUser) => {
   return userId;
 };
 
-/**
-* User login
-* @async
-* @param {object} req
-* @param {object} res
-* @param {function} next
-* @return {object} user if username & password match
-*/
 const postLogin = async (req, res, next) => {
   const {username, password} = req.body;
   // console.log('login', req.body);
@@ -167,13 +209,6 @@ const postLogin = async (req, res, next) => {
   }
 };
 
-/**
-* Get user info based on token
-* @async
-* @param {object} req
-* @param {object} res
-* @return {object} user info
-*/
 const getMe = async (req, res) => {
   const user = await selectUserById(req.user.userId);
   res.json({user, kubios_token: req.user.kubiosIdToken});
