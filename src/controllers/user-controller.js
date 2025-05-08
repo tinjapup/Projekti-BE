@@ -7,8 +7,6 @@ import {
 } from '../models/user-model.js';
 import {customError} from '../middlewares/error-handler.js';
 
-// TODO: not updated for kubios, but implement db modification functions for admin users -Mei
-
 // Fetch all user data
 const getUsers = async (req, res) => {
   // in a real-world application, password properties should never be sent to the client
@@ -58,7 +56,7 @@ const addUser = async (req, res, next) => {
   }
 };
 
-// Edit a user by id (TODO: use DB)
+// for testing and further development
 const editUser = (req, res) => {
   console.log('editUser request body', req.body);
   const user = users.find((user) => user.id == req.params.id);
@@ -72,7 +70,6 @@ const editUser = (req, res) => {
   }
 };
 
-// Delete a user by id (TODO: use DB)
 const deleteUser = (req, res) => {
   console.log('deleteUser', req.params.id);
   const index = users.findIndex((user) => user.id == req.params.id);

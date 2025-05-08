@@ -6,13 +6,35 @@ import fetch from 'node-fetch';
 const baseUrl = process.env.KUBIOS_API_URI;
 
 /**
-* Get user data from Kubios API example
-* TODO: Implement error handling
-* @async
-* @param {Request} req Request object including Kubios id token
-* @param {Response} res
-* @param {NextFunction} next
-*/
+ * @api {get} /api/kubios-data/user-data Get Kubios user data
+ * @apiName GetUserData
+ * @apiGroup Kubios
+ * @apiPermission token
+ *
+ * @apiDescription Fetches user data from the Kubios API for the authenticated user.
+ *
+ * @apiHeader {String} Authorization Bearer token.
+ *
+ * @apiSuccess {Object} data User data from Kubios.
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "data": {
+ *         "heart_rate": 72,
+ *         "stress_level": "low",
+ *         ...
+ *       }
+ *     }
+ *
+ * @apiError InvalidToken The provided token is invalid or expired.
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 403 Forbidden
+ *     {
+ *       "message": "Invalid token"
+ *     }
+ */
 const getUserData = async (req, res, next) => {
   const {kubiosIdToken} = req.user;
   const headers = new Headers();
@@ -20,7 +42,7 @@ const getUserData = async (req, res, next) => {
   headers.append('Authorization', kubiosIdToken);
 
   const response = await fetch(
-    // TODO: set the from date in request parameters
+    // for testing and further development, set the from date in request parameters
     baseUrl + '/result/self?from=2024-01-01T00%3A00%3A00%2B00%3A00',
     {
       method: 'GET',
@@ -31,18 +53,40 @@ const getUserData = async (req, res, next) => {
 
   // manipulate data if required
 
-
   return res.json(results);
 };
 
 /**
-* Get user info from Kubios API example
-* TODO: Implement error handling
-* @async
-* @param {Request} req Request object including Kubios id token
-* @param {Response} res
-* @param {NextFunction} next
-*/
+ * @api {get} /api/kubios-data/user-info Get Kubios user info
+ * @apiName GetUserInfo
+ * @apiGroup Kubios
+ * @apiPermission token
+ *
+ * @apiDescription Fetches user information from the Kubios API for the authenticated user.
+ *
+ * @apiHeader {String} Authorization Bearer token.
+ *
+ * @apiSuccess {Object} user User information from Kubios.
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "user": {
+ *         "first_name": "John",
+ *         "last_name": "Doe",
+ *         "email": "johndoe@example.com",
+ *         ...
+ *       }
+ *     }
+ *
+ * @apiError InvalidToken The provided token is invalid or expired.
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 403 Forbidden
+ *     {
+ *       "message": "Invalid token"
+ *     }
+ */
 const getUserInfo = async (req, res, next) => {
   const {kubiosIdToken} = req.user;
   const headers = new Headers();

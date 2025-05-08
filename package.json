@@ -10,16 +10,19 @@
     "apidoc": "apidoc -i src/ -o docs/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "MP",
+  "author": "Ryhmä 5",
   "license": "ISC",
   "apidoc": {
-    "name": "OmaUni API docs",
-    "title": "OmaUni API docs",
-    "description": "OmaUni project",
-    "url": "https://omauni.com/api",
+    "name": "OmaUni API Documentation",
+    "title": "OmaUni API Documentation",
+    "version": "1.0.0",
+    "description": "API documentation for the OmaUni project, providing endpoints for login and authentication, diary entries, and Kubios data integration.",
+    "url": "https://oma-uni.norwayeast.cloudapp.azure.com",
     "order": [
-      "Authentication"
-    ]
+      "Authentication",
+      "Entries",
+      "Kubios"
+        ]
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",

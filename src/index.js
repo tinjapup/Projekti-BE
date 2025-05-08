@@ -9,9 +9,38 @@ const hostname = '127.0.0.1';
 const app = express();
 const port = 3000;
 
-// Middleware required for Ulla's front-end exercises (Vite)
-// Also add: import cors from 'cors'; at the top of the file
-// and install the package: npm install cors
+/**
+ * @api {get} / Serve static HTML site
+ * @apiName ServeStatic
+ * @apiGroup General
+ * @apiDescription Serves a static HTML site at the root of the server.
+ */
+
+
+/**
+ * @api {use} /api/entries Entries API
+ * @apiName EntriesAPI
+ * @apiGroup Entries
+ * @apiDescription Endpoints for managing diary entries.
+ */
+
+/**
+ * @api {use} /api/kubios-data Kubios API
+ * @apiName KubiosAPI
+ * @apiGroup Kubios
+ * @apiDescription Endpoints for fetching data from the Kubios API.
+ */
+
+/**
+ * @api {use} /api Serve API Documentation
+ * @apiName APIDocs
+ * @apiGroup General
+ * @apiDescription Serves REST API documentation under the /api root path.
+ */
+
+
+
+// Middleware required for front-end (Vite)
 app.use(cors());
 
 // Serve a static HTML site at the root of the server

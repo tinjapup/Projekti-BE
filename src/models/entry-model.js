@@ -88,7 +88,6 @@ const selectEntryById = async (entryId) => {
  * @returns
  */
 
-// TODO: UPDATE THE updateEntry-function to use the new database structure -Mei
 
 const updateEntry = async (entry) => {
   try {

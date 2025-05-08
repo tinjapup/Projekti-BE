@@ -12,9 +12,46 @@ import {validationErrorHandler} from '../middlewares/error-handler.js';
 
 const entryRouter = express.Router();
 
+/**
+ * @api {post} /api/entries Add a new entry
+ * @apiName PostEntry
+ * @apiGroup Entries
+ * @apiPermission token
+ *
+ * @apiDescription Adds a new diary entry for the authenticated user.
+ *
+ * @apiHeader {String} Authorization Bearer token.
+ *
+ * @apiBody {String} date Entry date in YYYY-MM-DD format.
+ * @apiBody {String} bed_time Bedtime in ISO8601 format.
+ * @apiBody {Number} asleep_delay Time taken to fall asleep in minutes (0-1440).
+ * @apiBody {Number} time_awake Time spent awake during the night in minutes (0-1440).
+ * @apiBody {String} wakeup_time Wake-up time in ISO8601 format.
+ * @apiBody {Number} total_sleep Total sleep time in minutes (0-1440).
+ * @apiBody {Number} total_bed_time Total time spent in bed in minutes (0-1440).
+ * @apiBody {Number} sleep_quality Sleep quality rating (1-10).
+ * @apiBody {Number} daytime_alertness Daytime alertness rating (1-10).
+ * @apiBody {String} [sleep_mgmt_methods] Sleep management methods (optional).
+ * @apiBody {String} [sleep_factors] Sleep factors (optional).
+ *
+ * @apiSuccess {String} message Success message.
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 201 Created
+ *     {
+ *       "message": "Entry added."
+ *     }
+ *
+ * @apiError ValidationError Invalid input data.
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       "message": "Validation error",
+ *       "errors": [...]
+ *     }
+ */
 entryRouter
   .route('/')
-  // post to /api/entries
   .post(
     authenticateToken,
     body('date').notEmpty().isDate(),
@@ -33,23 +70,61 @@ entryRouter
   )
   .get(authenticateToken, getEntries);
 
-
+/**
+ * @api {post} /api/entries/draft Save a draft entry
+ * @apiName SaveDraft
+ * @apiGroup Entries
+ * @apiPermission token
+ *
+ * @apiDescription Saves a draft entry for the authenticated user.
+ *
+ * @apiHeader {String} Authorization Bearer token.
+ *
+ * @apiBody {String} date Entry date in YYYY-MM-DD format.
+ * @apiBody {Object} data Draft data in JSON format.
+ *
+ * @apiSuccess {String} message Success message.
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 201 Created
+ *     {
+ *       "message": "Draft saved."
+ *     }
+ */
 entryRouter
-.route('/draft')
-.post(
-  saveDraft,
-)
-.put(
-  updateDraft
-);
+  .route('/draft')
+  .post(saveDraft)
+  .put(updateDraft);
 
-
-  // TODO: do we need these? -Mei
+/**
+ * @api {put} /api/entries/:id Update an entry
+ * @apiName PutEntry
+ * @apiGroup Entries
+ * @apiPermission token
+ *
+ * @apiDescription Updates an existing diary entry for the authenticated user.
+ *
+ * @apiHeader {String} Authorization Bearer token.
+ *
+ * @apiParam {Number} id Entry ID.
+ *
+ * @apiBody {String} [entry_date] Entry date in YYYY-MM-DD format (optional).
+ * @apiBody {String} [mood] Mood description (optional).
+ * @apiBody {Number} [weight] Weight in kilograms (optional, 2-200).
+ * @apiBody {Number} [sleep_hours] Sleep hours (optional, 0-24).
+ * @apiBody {String} [notes] Notes (optional, max 1500 characters).
+ *
+ * @apiSuccess {String} message Success message.
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "message": "Entry updated."
+ *     }
+ */
 entryRouter
   .route('/:id')
-//  .get(authenticateToken, getEntryById)
   .put(
-    //authenticateToken,
     param('entry_id').isInt(), // entry_id parameter is part of the request URL, no request body
     body('entry_date').optional().isDate(),
     body('mood').trim().optional().isLength({min: 3, max: 25}).escape(),
